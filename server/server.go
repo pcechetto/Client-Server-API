@@ -33,7 +33,7 @@ type Dolar struct {
 func GetBid(w http.ResponseWriter, r *http.Request) {
 
 	ctx := context.Background()
-	ctx, cancel := context.WithTimeout(ctx, 654654654654*time.Millisecond)
+	ctx, cancel := context.WithTimeout(ctx, 500*time.Millisecond)
 	defer cancel()
 
 	response, err := http.NewRequestWithContext(ctx, "GET", "https://economia.awesomeapi.com.br/json/last/USD-BRL", nil)
@@ -78,7 +78,7 @@ var db *sql.DB
 
 func InserirnoBanco(data Dolar) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 654654654*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	defer cancel()
 
 	// Prepara a transação

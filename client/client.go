@@ -27,7 +27,7 @@ type Dolar struct {
 
 func main() {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 6546546546*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 700*time.Millisecond)
 	defer cancel()
 
 	req, err := http.NewRequestWithContext(ctx, "GET", "http://localhost:8080/cotacao", nil)
