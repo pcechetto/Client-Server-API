@@ -33,7 +33,7 @@ type Dolar struct {
 func GetBid(w http.ResponseWriter, r *http.Request) {
 
 	ctx := context.Background()
-	ctx, cancel := context.WithTimeout(ctx, 2009999999999*time.Millisecond)
+	ctx, cancel := context.WithTimeout(ctx, 654654654654*time.Millisecond)
 	defer cancel()
 
 	response, err := http.NewRequestWithContext(ctx, "GET", "https://economia.awesomeapi.com.br/json/last/USD-BRL", nil)
@@ -78,11 +78,29 @@ var db *sql.DB
 
 func InserirnoBanco(data Dolar) {
 
-	query := "INSERT INTO tabela (bids, create_date) VALUES (?, ?)"
-	_, err := db.Exec(query, data.Usdbrl.Bid, data.Usdbrl.CreateDate)
+	ctx, cancel := context.WithTimeout(context.Background(), 654654654*time.Millisecond)
+	defer cancel()
+
+	// Prepara a transação
+	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
 		panic(err)
 	}
+	defer tx.Rollback()
+
+
+	_, err = tx.ExecContext(ctx, "INSERT INTO tabela (bid, createdate) VALUES (?, ?)", data.Usdbrl.Bid, data.Usdbrl.CreateDate)
+	if err != nil {
+		panic(err)
+	}
+
+	// Comita a transação
+	err = tx.Commit()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Dados salvos com sucesso!")
 }
 
 func main() {
@@ -97,7 +115,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/cotacao", GetBid)
-	log.Fatal(http.ListenAndServe(":8080", mux))
 	fmt.Println("Server rodando 8080")
+	log.Fatal(http.ListenAndServe(":8080", mux))
 
 }
